@@ -1,0 +1,94 @@
+@import "tailwindcss";
+
+:root {
+  --pitch: #0b6b3a;
+  --pitch-dark: #063d22;
+  --pitch-line: #2e9c63;
+  --turf: #f4f6ec;
+  --chalk: #fefdf7;
+  --ink: #10130f;
+  --signal: #e8ff3a;
+  --whistle: #ff5a36;
+  --card-yellow: #ffc40c;
+  --shadow: rgba(6, 61, 34, 0.18);
+}
+
+@theme inline {
+  --color-pitch:       var(--pitch);
+  --color-pitch-dark:  var(--pitch-dark);
+  --color-pitch-line:  var(--pitch-line);
+  --color-turf:        var(--turf);
+  --color-chalk:       var(--chalk);
+  --color-ink:         var(--ink);
+  --color-signal:      var(--signal);
+  --color-whistle:     var(--whistle);
+  --color-card-yellow: var(--card-yellow);
+  --font-display:      var(--font-archivo-black);
+  --font-mono:         var(--font-space-mono);
+  --font-sans:         var(--font-sora);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--turf);
+  color: var(--ink);
+  font-family: var(--font-sora), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100dvh;
+}
+
+/* Pitch stripes background utility */
+.pitch-bg {
+  background:
+    repeating-linear-gradient(
+      90deg,
+      var(--pitch) 0 80px,
+      var(--pitch-dark) 80px 160px
+    );
+}
+
+/* Dashed border utility */
+.border-dashed-ink {
+  border: 1px dashed rgba(16, 19, 15, 0.25);
+}
+
+/* Card shadow */
+.card-shadow {
+  box-shadow: 5px 5px 0 var(--shadow);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes ballBounce {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-12px); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease both;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.5s ease both;
+}
+
+.animate-ball {
+  animation: ballBounce 1s ease-in-out infinite;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--turf); }
+::-webkit-scrollbar-thumb { background: var(--pitch-line); border-radius: 3px; }

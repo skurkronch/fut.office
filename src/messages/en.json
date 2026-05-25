@@ -1,0 +1,113 @@
+{
+  "common": {
+    "skip": "Skip",
+    "continue": "Continue",
+    "back": "Back",
+    "share": "Share",
+    "download": "Download",
+    "close": "Close",
+    "save": "Save",
+    "add": "Add",
+    "total": "Total",
+    "name": "Name",
+    "amount": "Amount",
+    "description": "Description",
+    "yes": "Yes",
+    "no": "No",
+    "copy": "Copy",
+    "copied": "Copied!",
+    "loading": "Loading...",
+    "error": "Something went wrong. Please try again."
+  },
+  "intro": {
+    "badge": "World Cup 2026",
+    "step1Title": "Pick a match",
+    "step1Desc": "See all 104 World Cup 2026 matches in your local time.",
+    "step2Title": "Organize the meetup",
+    "step2Desc": "Fill in the logistics — address, parking, and what to bring.",
+    "step3Title": "Share the card",
+    "step3Desc": "Download the card and send it on WhatsApp.",
+    "step4Title": "Split the expenses",
+    "step4Desc": "After the game, use the link to settle costs with everyone.",
+    "start": "Let's go!",
+    "of": "of"
+  },
+  "nav": {
+    "title": "fut office",
+    "subtitle": "World Cup 2026"
+  },
+  "home": {
+    "tagline": "Organize where to watch the games with your remote team.",
+    "timezoneLabel": "Your timezone",
+    "changeTimezone": "Change",
+    "upcomingMatches": "Upcoming matches",
+    "noMoreMatches": "The World Cup is over. See you in 2030!",
+    "organize": "Organize meetup",
+    "today": "Today",
+    "tomorrow": "Tomorrow"
+  },
+  "stage": {
+    "group": "Group Stage",
+    "r32": "Round of 32",
+    "r16": "Round of 16",
+    "qf": "Quarterfinals",
+    "sf": "Semifinals",
+    "bronze": "Third Place",
+    "final": "Final"
+  },
+  "timezone": {
+    "title": "Select your timezone",
+    "search": "Search city or timezone...",
+    "common": "Common timezones",
+    "all": "All",
+    "confirm": "Confirm"
+  },
+  "meeting": {
+    "title": "Organize meetup",
+    "match": "Match",
+    "section1": "Where?",
+    "address": "Address or location name",
+    "addressPlaceholder": "e.g. 123 Main St, or 'My apartment'",
+    "parking": "Parking available?",
+    "meetingRoom": "Space for work calls?",
+    "section2": "What to bring?",
+    "bringFood": "Ask guests to bring something?",
+    "bringFoodPlaceholder": "e.g. beer, snacks, chips...",
+    "section3": "Message",
+    "note": "Message to guests (optional)",
+    "notePlaceholder": "e.g. Come 30 minutes early!",
+    "generateCard": "Generate card",
+    "cardReady": "Your card is ready!",
+    "downloadCard": "Download image",
+    "shareCard": "Share",
+    "createSplit": "Create expense split",
+    "splitCreated": "Split link ready!",
+    "copySplitLink": "Copy link",
+    "yourName": "Your name (host)",
+    "yourNamePlaceholder": "e.g. Carlos"
+  },
+  "split": {
+    "title": "Expense split",
+    "match": "Match",
+    "host": "Host",
+    "addExpense": "Add expense",
+    "yourName": "Your name",
+    "yourNamePlaceholder": "e.g. Maria",
+    "whatYouPaid": "What you paid for",
+    "whatYouPaidPlaceholder": "e.g. Beer, snacks...",
+    "howMuch": "How much",
+    "addButton": "Add",
+    "expenses": "Expenses",
+    "noExpenses": "No expenses yet. Be the first to add one!",
+    "settlement": "How to settle up",
+    "owes": "owes",
+    "settled": "All settled up! 🎉",
+    "perPerson": "per person",
+    "total": "Total spent",
+    "people": "people",
+    "shareLink": "Share this link with everyone who attended:"
+  },
+  "ad": {
+    "label": "Advertisement"
+  }
+}

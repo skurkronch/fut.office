@@ -1,0 +1,113 @@
+{
+  "common": {
+    "skip": "Saltar",
+    "continue": "Continuar",
+    "back": "Regresar",
+    "share": "Compartir",
+    "download": "Descargar",
+    "close": "Cerrar",
+    "save": "Guardar",
+    "add": "Agregar",
+    "total": "Total",
+    "name": "Nombre",
+    "amount": "Monto",
+    "description": "Descripción",
+    "yes": "Sí",
+    "no": "No",
+    "copy": "Copiar",
+    "copied": "¡Copiado!",
+    "loading": "Cargando...",
+    "error": "Ocurrió un error. Intenta de nuevo."
+  },
+  "intro": {
+    "badge": "Mundial 2026",
+    "step1Title": "Elige un partido",
+    "step1Desc": "Mira los 104 partidos del Mundial 2026 en tu zona horaria.",
+    "step2Title": "Organiza la quedada",
+    "step2Desc": "Llena los datos de tu casa — dirección, estacionamiento y qué llevar.",
+    "step3Title": "Comparte la tarjeta",
+    "step3Desc": "Descarga la tarjeta y mándala por WhatsApp.",
+    "step4Title": "Divide los gastos",
+    "step4Desc": "Tras el partido, usa el link para liquidar cuentas entre todos.",
+    "start": "¡A jugar!",
+    "of": "de"
+  },
+  "nav": {
+    "title": "fut office",
+    "subtitle": "Mundial 2026"
+  },
+  "home": {
+    "tagline": "Organiza dónde ver los partidos con tu equipo remoto.",
+    "timezoneLabel": "Tu zona horaria",
+    "changeTimezone": "Cambiar",
+    "upcomingMatches": "Próximos partidos",
+    "noMoreMatches": "Ya terminó el Mundial. ¡Hasta el 2030!",
+    "organize": "Organizar quedada",
+    "today": "Hoy",
+    "tomorrow": "Mañana"
+  },
+  "stage": {
+    "group": "Fase de Grupos",
+    "r32": "Ronda de 32",
+    "r16": "Octavos de Final",
+    "qf": "Cuartos de Final",
+    "sf": "Semifinales",
+    "bronze": "Tercer Lugar",
+    "final": "Final"
+  },
+  "timezone": {
+    "title": "Selecciona tu zona horaria",
+    "search": "Buscar ciudad o zona...",
+    "common": "Zonas comunes",
+    "all": "Todas",
+    "confirm": "Confirmar"
+  },
+  "meeting": {
+    "title": "Organizar quedada",
+    "match": "Partido",
+    "section1": "¿Dónde?",
+    "address": "Dirección o nombre del lugar",
+    "addressPlaceholder": "Ej. Calle 5 #123, o 'Mi depa'",
+    "parking": "¿Hay estacionamiento?",
+    "meetingRoom": "¿Hay lugar para tomar juntas?",
+    "section2": "¿Qué llevar?",
+    "bringFood": "¿Pides que lleven algo?",
+    "bringFoodPlaceholder": "Ej. cervezas, botana, papas...",
+    "section3": "Mensaje",
+    "note": "Mensaje para los invitados (opcional)",
+    "notePlaceholder": "Ej. ¡Lleguen 30 min antes!",
+    "generateCard": "Generar tarjeta",
+    "cardReady": "¡Tu tarjeta está lista!",
+    "downloadCard": "Descargar imagen",
+    "shareCard": "Compartir",
+    "createSplit": "Crear divisor de gastos",
+    "splitCreated": "¡Link del divisor listo!",
+    "copySplitLink": "Copiar link",
+    "yourName": "Tu nombre (anfitrión)",
+    "yourNamePlaceholder": "Ej. Carlos"
+  },
+  "split": {
+    "title": "Divisor de gastos",
+    "match": "Partido",
+    "host": "Anfitrión",
+    "addExpense": "Agregar gasto",
+    "yourName": "Tu nombre",
+    "yourNamePlaceholder": "Ej. María",
+    "whatYouPaid": "¿En qué gastaste?",
+    "whatYouPaidPlaceholder": "Ej. Cervezas, botana...",
+    "howMuch": "¿Cuánto?",
+    "addButton": "Agregar",
+    "expenses": "Gastos registrados",
+    "noExpenses": "Nadie ha agregado gastos aún. ¡Sé el primero!",
+    "settlement": "Cómo quedar a mano",
+    "owes": "le debe",
+    "settled": "¡Todos en paz! 🎉",
+    "perPerson": "por persona",
+    "total": "Total gastado",
+    "people": "personas",
+    "shareLink": "Comparte este link con todos los que fueron al partido:"
+  },
+  "ad": {
+    "label": "Publicidad"
+  }
+}
