@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import type { Locale } from '@/lib/i18n';
 import type { Match } from '@/data/matches';
 import { formatMatchTime, formatMatchDate, flagEmoji } from '@/lib/utils';
@@ -9,7 +9,11 @@ import AdSlot from './AdSlot';
 
 export interface MeetingData {
   hostName: string;
-  address: string;
+  mapsUrl: string;
+  placeName: string;
+  interiorNumber: string;
+  lat?: number;
+  lng?: number;
   parking: boolean;
   meetingRoom: boolean;
   bringFood: string;
@@ -18,24 +22,32 @@ export interface MeetingData {
 
 type ModalStep = 'form' | 'card';
 
+type Target =
+  | { match: Match }
+  | { matches: Match[]; dayLabel: string };
+
 interface Props {
-  match: Match;
+  target: Target;
   timezone: string;
   lang: Locale;
   dict: Record<string, Record<string, string>>;
   onClose: () => void;
 }
 
-export default function MeetingModal({ match, timezone, lang, dict, onClose }: Props) {
+export default function MeetingModal({ target, timezone, lang, dict, onClose }: Props) {
   const [step, setStep] = useState<ModalStep>('form');
   const [data, setData] = useState<MeetingData>({
     hostName: '',
-    address: '',
+    mapsUrl: '',
+    placeName: '',
+    interiorNumber: '',
     parking: false,
     meetingRoom: false,
     bringFood: '',
     note: '',
   });
+  const [resolvedEmbed, setResolvedEmbed] = useState<string | null>(null);
+  const [resolvingMap, setResolvingMap] = useState(false);
   const [splitUrl, setSplitUrl] = useState<string | null>(null);
   const [splitCopied, setSplitCopied] = useState(false);
   const [creatingSplt, setCreatingSplit] = useState(false);
@@ -43,23 +55,66 @@ export default function MeetingModal({ match, timezone, lang, dict, onClose }: P
 
   const t = dict.meeting ?? {};
   const common = dict.common ?? {};
-  const time = formatMatchTime(match.datetime, timezone, lang);
-  const date = formatMatchDate(match.datetime, timezone, lang);
 
+  // ── Derived display info ───────────────────────────────────────────────
+  const isMatch = 'match' in target;
+  const primaryMatch = isMatch ? target.match : target.matches[0];
+  const time = primaryMatch ? formatMatchTime(primaryMatch.datetime, timezone, lang) : '';
+  const date = primaryMatch ? formatMatchDate(primaryMatch.datetime, timezone, lang) : '';
+
+  // ── Google Maps URL resolution (debounced) ─────────────────────────────
+  useEffect(() => {
+    const url = data.mapsUrl.trim();
+    if (!url) {
+      setResolvedEmbed(null);
+      return;
+    }
+    const isMapsUrl =
+      url.includes('google.com/maps') ||
+      url.includes('maps.app.goo.gl') ||
+      url.includes('goo.gl/maps');
+    if (!isMapsUrl) return;
+
+    const timer = setTimeout(async () => {
+      setResolvingMap(true);
+      try {
+        const res = await fetch(`/api/resolve-maps?url=${encodeURIComponent(url)}`);
+        const info = await res.json();
+        if (info.embedUrl) setResolvedEmbed(info.embedUrl);
+        // Store place name + coordinates (used by the shareable card)
+        setData((d) => ({
+          ...d,
+          placeName: info.placeName ?? d.placeName,
+          lat: info.lat,
+          lng: info.lng,
+        }));
+      } catch {
+        // silently ignore — embed stays null
+      } finally {
+        setResolvingMap(false);
+      }
+    }, 600);
+
+    return () => clearTimeout(timer);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data.mapsUrl]);
+
+  // ── Handlers ───────────────────────────────────────────────────────────
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!data.address.trim()) return;
+    if (!data.mapsUrl.trim()) return;
     setStep('card');
   };
 
   const handleCreateSplit = useCallback(async () => {
     if (!data.hostName.trim()) return;
     setCreatingSplit(true);
+    const matchId = isMatch ? target.match.id : 'standalone';
     try {
       const res = await fetch('/api/splits', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ matchId: match.id, hostName: data.hostName }),
+        body: JSON.stringify({ matchId, hostName: data.hostName }),
       });
       const json = await res.json();
       const url = `${window.location.origin}/${lang}/split/${json.id}`;
@@ -69,7 +124,7 @@ export default function MeetingModal({ match, timezone, lang, dict, onClose }: P
     } finally {
       setCreatingSplit(false);
     }
-  }, [data.hostName, match.id, lang, common.error]);
+  }, [data.hostName, isMatch, target, lang, common.error]);
 
   const handleCopyLink = () => {
     if (!splitUrl) return;
@@ -91,22 +146,43 @@ export default function MeetingModal({ match, timezone, lang, dict, onClose }: P
         {/* Header */}
         <div className="pitch-bg border-b-4 border-signal px-5 pt-5 pb-4 shrink-0">
           <div className="flex items-start justify-between">
-            <div>
+            <div className="flex-1 min-w-0 mr-3">
               <div className="font-mono text-signal text-xs tracking-widest uppercase mb-1">
-                {t.title ?? 'Organizar quedada'}
+                {isMatch
+                  ? (t.title ?? 'Organizar quedada')
+                  : (t.organizeDay ?? 'Organizar el día completo')}
               </div>
-              <div className="font-display text-chalk text-lg lowercase">
-                {flagEmoji(match.homeTeam)} {match.homeTeam}
-                <span className="text-chalk/50 font-mono text-base"> vs </span>
-                {flagEmoji(match.awayTeam)} {match.awayTeam}
-              </div>
-              <div className="font-mono text-chalk/60 text-xs mt-0.5">
-                {date} · {time} · {match.city}
-              </div>
+
+              {isMatch ? (
+                <>
+                  <div className="font-display text-white text-lg lowercase">
+                    {flagEmoji(target.match.homeTeam)} {target.match.homeTeam}
+                    <span className="text-white/50 font-mono text-base"> vs </span>
+                    {flagEmoji(target.match.awayTeam)} {target.match.awayTeam}
+                  </div>
+                  <div className="font-mono text-white/60 text-xs mt-0.5">
+                    {date} · {time} · {target.match.city}
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="font-display text-white text-lg lowercase">
+                    📅 {target.dayLabel}
+                  </div>
+                  <div className="mt-1 space-y-0.5">
+                    {target.matches.map((m) => (
+                      <div key={m.id} className="font-mono text-white/60 text-xs truncate">
+                        {flagEmoji(m.homeTeam)} {m.homeTeam} vs {flagEmoji(m.awayTeam)}{' '}
+                        {m.awayTeam} · {formatMatchTime(m.datetime, timezone, lang)}
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
             </div>
             <button
               onClick={onClose}
-              className="text-chalk/50 hover:text-chalk text-2xl leading-none ml-4 mt-1"
+              className="text-white/50 hover:text-white text-2xl leading-none mt-1 shrink-0"
             >
               ×
             </button>
@@ -132,21 +208,75 @@ export default function MeetingModal({ match, timezone, lang, dict, onClose }: P
                 />
               </div>
 
-              {/* Where */}
+              {/* Google Maps URL */}
               <div>
                 <div className="font-mono text-xs text-ink/60 uppercase tracking-wider mb-1.5">
                   {t.section1 ?? '¿Dónde?'}
                 </div>
+
+                <div className="relative">
+                  <input
+                    type="url"
+                    required
+                    placeholder={t.mapsUrlPlaceholder ?? 'Pega el link de Google Maps aquí'}
+                    value={data.mapsUrl}
+                    onChange={(e) => {
+                      setData((d) => ({ ...d, mapsUrl: e.target.value, placeName: '' }));
+                      setResolvedEmbed(null);
+                    }}
+                    className="w-full border-2 border-ink rounded-lg px-3 py-2 font-sans text-sm bg-turf text-ink placeholder-ink/30 outline-none focus:border-pitch pr-8"
+                  />
+                  {resolvingMap && (
+                    <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs animate-pulse">
+                      🔍
+                    </span>
+                  )}
+                </div>
+
+                {/* Resolved place name chip */}
+                {data.placeName && !resolvingMap && (
+                  <div className="mt-1.5 flex items-center gap-1.5">
+                    <span className="text-pitch text-xs">✓</span>
+                    <span className="font-mono text-pitch text-xs">
+                      {t.placeFound ?? 'Lugar encontrado'}:{' '}
+                      <span className="font-semibold">{data.placeName}</span>
+                    </span>
+                  </div>
+                )}
+                {resolvingMap && (
+                  <p className="font-mono text-ink/40 text-xs mt-1 animate-pulse">
+                    {t.resolving ?? 'Buscando ubicación...'}
+                  </p>
+                )}
+
+                {/* Map embed preview */}
+                {resolvedEmbed && (
+                  <div className="mt-2 rounded-lg overflow-hidden border border-ink/20">
+                    <iframe
+                      src={resolvedEmbed}
+                      className="maps-embed"
+                      loading="lazy"
+                      allowFullScreen
+                      referrerPolicy="no-referrer-when-downgrade"
+                      title="map preview"
+                    />
+                  </div>
+                )}
+
+                {/* Interior number */}
                 <input
                   type="text"
-                  required
-                  placeholder={t.addressPlaceholder}
-                  value={data.address}
-                  onChange={(e) => setData((d) => ({ ...d, address: e.target.value }))}
-                  className="w-full border-2 border-ink rounded-lg px-3 py-2 font-sans text-sm bg-turf text-ink placeholder-ink/30 outline-none focus:border-pitch mb-3"
+                  placeholder={t.interiorNumberPlaceholder ?? 'Ej. Depto 4B, Piso 3'}
+                  value={data.interiorNumber}
+                  onChange={(e) => setData((d) => ({ ...d, interiorNumber: e.target.value }))}
+                  className="w-full border-2 border-ink/40 rounded-lg px-3 py-2 font-sans text-sm bg-turf text-ink placeholder-ink/30 outline-none focus:border-pitch mt-2"
                 />
+                <p className="font-mono text-ink/35 text-xs mt-0.5">
+                  {t.interiorNumber ?? 'Número interior (opcional)'}
+                </p>
 
-                <div className="flex gap-3">
+                {/* Logistics toggles */}
+                <div className="flex gap-3 mt-3">
                   <Toggle
                     label={t.parking ?? '¿Estacionamiento?'}
                     value={data.parking}
@@ -194,7 +324,7 @@ export default function MeetingModal({ match, timezone, lang, dict, onClose }: P
 
               <button
                 type="submit"
-                className="w-full bg-pitch text-chalk font-display lowercase text-lg py-3 rounded-xl hover:bg-pitch-line active:scale-95 transition-all"
+                className="w-full bg-pitch text-white font-display lowercase text-lg py-3 rounded-xl hover:bg-pitch-line active:scale-95 transition-all"
               >
                 {t.generateCard ?? 'Generar tarjeta'}
               </button>
@@ -205,7 +335,13 @@ export default function MeetingModal({ match, timezone, lang, dict, onClose }: P
                 {t.cardReady ?? '¡Tu tarjeta está lista!'}
               </p>
 
-              <ShareableCard match={match} data={data} timezone={timezone} lang={lang} dict={dict} />
+              <ShareableCard
+                target={target}
+                data={data}
+                timezone={timezone}
+                lang={lang}
+                dict={dict}
+              />
 
               {/* Expense split */}
               <div className="border-2 border-ink rounded-xl p-4 bg-turf space-y-3">
@@ -218,7 +354,7 @@ export default function MeetingModal({ match, timezone, lang, dict, onClose }: P
                     <p className="font-mono text-xs text-ink/50 break-all">{splitUrl}</p>
                     <button
                       onClick={handleCopyLink}
-                      className="w-full bg-signal text-ink font-mono text-xs uppercase tracking-wider py-2 rounded-lg hover:bg-card-yellow active:scale-95 transition-all"
+                      className="w-full bg-signal text-pitch-dark font-mono text-xs uppercase tracking-wider py-2 rounded-lg hover:bg-card-yellow active:scale-95 transition-all"
                     >
                       {splitCopied ? (common.copied ?? '¡Copiado!') : (t.copySplitLink ?? 'Copiar link')}
                     </button>
@@ -265,7 +401,7 @@ function Toggle({
       onClick={() => onChange(!value)}
       className={`flex-1 flex items-center justify-between border-2 rounded-lg px-3 py-2 text-xs font-mono transition-colors ${
         value
-          ? 'border-pitch bg-pitch text-chalk'
+          ? 'border-pitch bg-pitch text-white'
           : 'border-ink/30 bg-turf text-ink/60 hover:border-ink/50'
       }`}
     >

@@ -89,19 +89,19 @@ export default function SplitClient({ lang, dict, split, initialExpenses, match 
             ⚽ fut office · {t.title ?? 'Divisor'}
           </div>
           {match && (
-            <div className="font-display text-chalk text-xl lowercase">
+            <div className="font-display text-white text-xl lowercase">
               {flagEmoji(match.homeTeam)} {match.homeTeam}
-              <span className="text-chalk/50 font-mono text-base"> vs </span>
+              <span className="text-white/50 font-mono text-base"> vs </span>
               {flagEmoji(match.awayTeam)} {match.awayTeam}
             </div>
           )}
           {match && (
-            <div className="font-mono text-chalk/50 text-xs mt-0.5">
+            <div className="font-mono text-white/50 text-xs mt-0.5">
               {matchDate} · {matchTime}
             </div>
           )}
-          <div className="font-mono text-chalk/60 text-sm mt-1">
-            {t.host ?? 'Anfitrión'}: <span className="text-chalk font-bold">{split.host_name}</span>
+          <div className="font-mono text-white/60 text-sm mt-1">
+            {t.host ?? 'Anfitrión'}: <span className="text-white font-bold">{split.host_name}</span>
           </div>
         </div>
       </header>
@@ -116,7 +116,7 @@ export default function SplitClient({ lang, dict, split, initialExpenses, match 
             </div>
             <button
               onClick={handleShareCopy}
-              className="shrink-0 bg-signal text-ink font-mono text-xs px-3 rounded-lg hover:bg-card-yellow active:scale-95 transition-all"
+              className="shrink-0 bg-signal text-pitch-dark font-mono text-xs px-3 rounded-lg hover:bg-card-yellow active:scale-95 transition-all"
             >
               {sharecopied ? (common.copied ?? '¡Copiado!') : (common.copy ?? 'Copiar')}
             </button>
@@ -161,7 +161,7 @@ export default function SplitClient({ lang, dict, split, initialExpenses, match 
               <button
                 type="submit"
                 disabled={submitting}
-                className="bg-pitch text-chalk font-mono text-sm px-4 rounded-lg hover:bg-pitch-line active:scale-95 transition-all disabled:opacity-50"
+                className="bg-pitch text-white font-mono text-sm px-4 rounded-lg hover:bg-pitch-line active:scale-95 transition-all disabled:opacity-50"
               >
                 {submitting ? '...' : (t.addButton ?? 'Agregar')}
               </button>

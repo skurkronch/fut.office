@@ -24,7 +24,7 @@
     "step1Title": "Elige un partido",
     "step1Desc": "Mira los 104 partidos del Mundial 2026 en tu zona horaria.",
     "step2Title": "Organiza la quedada",
-    "step2Desc": "Llena los datos de tu casa — dirección, estacionamiento y qué llevar.",
+    "step2Desc": "Comparte el link de Google Maps y define qué llevar.",
     "step3Title": "Comparte la tarjeta",
     "step3Desc": "Descarga la tarjeta y mándala por WhatsApp.",
     "step4Title": "Divide los gastos",
@@ -34,7 +34,8 @@
   },
   "nav": {
     "title": "fut office",
-    "subtitle": "Mundial 2026"
+    "subtitle": "Mundial 2026",
+    "splitLink": "Dividir gastos"
   },
   "home": {
     "tagline": "Organiza dónde ver los partidos con tu equipo remoto.",
@@ -42,7 +43,8 @@
     "changeTimezone": "Cambiar",
     "upcomingMatches": "Próximos partidos",
     "noMoreMatches": "Ya terminó el Mundial. ¡Hasta el 2030!",
-    "organize": "Organizar quedada",
+    "organize": "Organizar",
+    "organizeDay": "Organizar todos los partidos del día",
     "today": "Hoy",
     "tomorrow": "Mañana"
   },
@@ -60,16 +62,29 @@
     "search": "Buscar ciudad o zona...",
     "common": "Zonas comunes",
     "all": "Todas",
-    "confirm": "Confirmar"
+    "confirm": "Confirmar",
+    "mandatory_title": "¿En qué zona horaria estás?",
+    "mandatory_subtitle": "Los partidos se mostrarán en tu hora local",
+    "detected": "Zona detectada",
+    "use_detected": "Usar esta",
+    "all_zones": "Ver todas las zonas horarias",
+    "confirm_btn": "Confirmar zona horaria",
+    "noResults": "Sin resultados"
   },
   "meeting": {
     "title": "Organizar quedada",
+    "organizeDay": "Organizar el día completo",
+    "matches": "partidos",
     "match": "Partido",
     "section1": "¿Dónde?",
-    "address": "Dirección o nombre del lugar",
-    "addressPlaceholder": "Ej. Calle 5 #123, o 'Mi depa'",
+    "mapsUrl": "URL de Google Maps",
+    "mapsUrlPlaceholder": "Pega el link de Google Maps aquí",
+    "resolving": "Buscando ubicación...",
+    "placeFound": "Lugar encontrado",
+    "interiorNumber": "Número interior (opcional)",
+    "interiorNumberPlaceholder": "Ej. Depto 4B, Piso 3",
     "parking": "¿Hay estacionamiento?",
-    "meetingRoom": "¿Hay lugar para tomar juntas?",
+    "meetingRoom": "Espacio privado para juntas",
     "section2": "¿Qué llevar?",
     "bringFood": "¿Pides que lleven algo?",
     "bringFoodPlaceholder": "Ej. cervezas, botana, papas...",
@@ -88,6 +103,9 @@
   },
   "split": {
     "title": "Divisor de gastos",
+    "newTitle": "Nuevo divisor",
+    "createNewSplit": "Nuevo divisor de gastos",
+    "hostNameLabel": "Tu nombre (anfitrión)",
     "match": "Partido",
     "host": "Anfitrión",
     "addExpense": "Agregar gasto",

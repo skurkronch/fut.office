@@ -12,9 +12,17 @@ interface Props {
   lang: Locale;
   dict: Record<string, Record<string, string>>;
   onSelectMatch: (match: Match) => void;
+  onSelectDay: (matches: Match[], dayLabel: string) => void;
 }
 
-export default function MatchCalendar({ matches, timezone, lang, dict, onSelectMatch }: Props) {
+export default function MatchCalendar({
+  matches,
+  timezone,
+  lang,
+  dict,
+  onSelectMatch,
+  onSelectDay,
+}: Props) {
   const t = dict.home ?? {};
 
   const grouped = useMemo(() => {
@@ -44,6 +52,7 @@ export default function MatchCalendar({ matches, timezone, lang, dict, onSelectM
             lang={lang}
             dict={dict}
             onSelectMatch={onSelectMatch}
+            onSelectDay={onSelectDay}
           />
         );
       })}
@@ -58,6 +67,7 @@ function DayBlock({
   lang,
   dict,
   onSelectMatch,
+  onSelectDay,
 }: {
   header: string;
   matches: Match[];
@@ -65,7 +75,9 @@ function DayBlock({
   lang: Locale;
   dict: Record<string, Record<string, string>>;
   onSelectMatch: (match: Match) => void;
+  onSelectDay: (matches: Match[], dayLabel: string) => void;
 }) {
+  const t = dict.home ?? {};
   const stageLabel = STAGE_LABELS[matches[0].stage as Stage]?.[lang] ?? '';
 
   return (
@@ -89,6 +101,27 @@ function DayBlock({
           />
         ))}
       </div>
+
+      {/* Day-level organizer CTA */}
+      <button
+        onClick={() => onSelectDay(matches, header)}
+        className="mt-2 w-full flex items-center justify-between gap-3 bg-pitch/8 hover:bg-pitch/15 border-2 border-pitch/25 hover:border-pitch/50 text-pitch rounded-xl px-4 py-3 transition-all group"
+      >
+        <div className="flex items-center gap-2">
+          <span className="text-lg">📅</span>
+          <div className="text-left">
+            <div className="font-display text-sm lowercase leading-tight">
+              {t.organizeDay ?? 'Organizar todos los partidos del día'}
+            </div>
+            <div className="font-mono text-xs text-pitch/60 mt-0.5">
+              {matches.length} {matches.length === 1
+                ? (lang === 'es' ? 'partido' : 'match')
+                : (lang === 'es' ? 'partidos' : 'matches')}
+            </div>
+          </div>
+        </div>
+        <span className="font-mono text-pitch/40 group-hover:text-pitch/70 text-lg transition-colors">→</span>
+      </button>
     </div>
   );
 }
@@ -138,7 +171,7 @@ function MatchRow({
       {/* CTA */}
       <button
         onClick={onSelect}
-        className="shrink-0 bg-pitch text-chalk font-mono text-xs px-3 py-2 rounded-lg hover:bg-pitch-line active:scale-95 transition-all"
+        className="shrink-0 bg-pitch text-white font-mono text-xs px-3 py-2 rounded-lg hover:bg-pitch-line active:scale-95 transition-all"
       >
         {t.organize ?? 'Organizar'}
       </button>

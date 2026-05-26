@@ -24,7 +24,7 @@
     "step1Title": "Pick a match",
     "step1Desc": "See all 104 World Cup 2026 matches in your local time.",
     "step2Title": "Organize the meetup",
-    "step2Desc": "Fill in the logistics — address, parking, and what to bring.",
+    "step2Desc": "Share a Google Maps link and decide what to bring.",
     "step3Title": "Share the card",
     "step3Desc": "Download the card and send it on WhatsApp.",
     "step4Title": "Split the expenses",
@@ -34,7 +34,8 @@
   },
   "nav": {
     "title": "fut office",
-    "subtitle": "World Cup 2026"
+    "subtitle": "World Cup 2026",
+    "splitLink": "Split expenses"
   },
   "home": {
     "tagline": "Organize where to watch the games with your remote team.",
@@ -42,7 +43,8 @@
     "changeTimezone": "Change",
     "upcomingMatches": "Upcoming matches",
     "noMoreMatches": "The World Cup is over. See you in 2030!",
-    "organize": "Organize meetup",
+    "organize": "Organize",
+    "organizeDay": "Organize all matches of the day",
     "today": "Today",
     "tomorrow": "Tomorrow"
   },
@@ -60,16 +62,29 @@
     "search": "Search city or timezone...",
     "common": "Common timezones",
     "all": "All",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "mandatory_title": "What timezone are you in?",
+    "mandatory_subtitle": "Matches will be shown in your local time",
+    "detected": "Detected timezone",
+    "use_detected": "Use this",
+    "all_zones": "See all timezones",
+    "confirm_btn": "Confirm timezone",
+    "noResults": "No results"
   },
   "meeting": {
     "title": "Organize meetup",
+    "organizeDay": "Organize the full day",
+    "matches": "matches",
     "match": "Match",
     "section1": "Where?",
-    "address": "Address or location name",
-    "addressPlaceholder": "e.g. 123 Main St, or 'My apartment'",
+    "mapsUrl": "Google Maps URL",
+    "mapsUrlPlaceholder": "Paste the Google Maps link here",
+    "resolving": "Finding location...",
+    "placeFound": "Location found",
+    "interiorNumber": "Interior number (optional)",
+    "interiorNumberPlaceholder": "e.g. Apt 4B, Floor 3",
     "parking": "Parking available?",
-    "meetingRoom": "Space for work calls?",
+    "meetingRoom": "Private space for calls",
     "section2": "What to bring?",
     "bringFood": "Ask guests to bring something?",
     "bringFoodPlaceholder": "e.g. beer, snacks, chips...",
@@ -88,6 +103,9 @@
   },
   "split": {
     "title": "Expense split",
+    "newTitle": "New split",
+    "createNewSplit": "New expense split",
+    "hostNameLabel": "Your name (host)",
     "match": "Match",
     "host": "Host",
     "addExpense": "Add expense",

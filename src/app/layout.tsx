@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Archivo_Black, Space_Mono, Sora } from 'next/font/google';
+import { Archivo_Black, JetBrains_Mono, Inter } from 'next/font/google';
 import './globals.css';
 
 const archivoBlack = Archivo_Black({
@@ -9,17 +9,16 @@ const archivoBlack = Archivo_Black({
   display: 'swap',
 });
 
-const spaceMono = Space_Mono({
-  weight: ['400', '700'],
-  variable: '--font-space-mono',
-  subsets: ['latin'],
+const inter = Inter({
+  variable: '--font-inter',
+  subsets: ['latin', 'latin-ext'],
   display: 'swap',
 });
 
-const sora = Sora({
-  variable: '--font-sora',
+const jetbrainsMono = JetBrains_Mono({
+  weight: ['400', '500', '700'],
+  variable: '--font-jetbrains-mono',
   subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
   display: 'swap',
 });
 
@@ -38,8 +37,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="es"
-      className={`${archivoBlack.variable} ${spaceMono.variable} ${sora.variable} h-full antialiased`}
+      className={`${archivoBlack.variable} ${inter.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
+      {/* Prevent flash of unstyled content: apply stored theme before first paint */}
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{var t=localStorage.getItem('fut-theme');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t)}catch(e){}`,
+          }}
+        />
+      </head>
       <body className="min-h-dvh flex flex-col">{children}</body>
     </html>
   );

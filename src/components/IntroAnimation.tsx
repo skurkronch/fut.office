@@ -36,20 +36,19 @@ export default function IntroAnimation({ lang, dict, onClose }: Props) {
   return (
     <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-pitch-dark">
       {/* Decorative circle */}
-      <div className="absolute top-[-80px] right-[-60px] w-64 h-64 rounded-full border-2 border-chalk/20 pointer-events-none" />
+      <div className="absolute top-[-80px] right-[-60px] w-64 h-64 rounded-full border-2 border-white/20 pointer-events-none" />
 
       {/* Skip + lang */}
       <div className="absolute top-5 right-5 flex items-center gap-3">
         <Link
           href={`/${otherLang}`}
-          className="font-mono text-xs text-chalk/50 hover:text-chalk transition-colors uppercase tracking-widest"
-          onClick={onClose}
+          className="font-mono text-xs text-white/50 hover:text-white transition-colors uppercase tracking-widest"
         >
           {lang === 'es' ? 'EN' : 'ES'}
         </Link>
         <button
           onClick={onClose}
-          className="font-mono text-xs text-chalk/50 hover:text-chalk transition-colors uppercase tracking-widest"
+          className="font-mono text-xs text-white/50 hover:text-white transition-colors uppercase tracking-widest"
         >
           {t.skip ?? 'Skip'}
         </button>
@@ -68,10 +67,10 @@ export default function IntroAnimation({ lang, dict, onClose }: Props) {
         className="animate-slide-up flex flex-col items-center text-center px-8 max-w-sm"
       >
         <div className="text-6xl mb-6 animate-ball">{s.icon}</div>
-        <h2 className="font-display text-chalk text-3xl lowercase mb-3">
+        <h2 className="font-display text-white text-3xl lowercase mb-3">
           {t[s.titleKey]}
         </h2>
-        <p className="text-chalk/75 text-base leading-relaxed">
+        <p className="text-white/75 text-base leading-relaxed">
           {t[s.descKey]}
         </p>
       </div>
@@ -82,7 +81,7 @@ export default function IntroAnimation({ lang, dict, onClose }: Props) {
           <div
             key={i}
             className={`h-1.5 rounded-full transition-all duration-300 ${
-              i === step ? 'w-6 bg-signal' : 'w-1.5 bg-chalk/25'
+              i === step ? 'w-6 bg-signal' : 'w-1.5 bg-white/25'
             }`}
           />
         ))}
@@ -91,12 +90,12 @@ export default function IntroAnimation({ lang, dict, onClose }: Props) {
       {/* CTA */}
       <button
         onClick={advance}
-        className="mt-8 px-8 py-3 bg-signal text-ink font-display lowercase text-lg rounded-full hover:bg-signal/90 active:scale-95 transition-all"
+        className="mt-8 px-8 py-3 bg-signal text-pitch-dark font-display lowercase text-lg rounded-full hover:bg-signal/90 active:scale-95 transition-all"
       >
         {step < total - 1 ? (t.continue ?? 'Continuar') : (t.start ?? '¡A jugar!')}
       </button>
 
-      <p className="mt-4 font-mono text-chalk/30 text-xs">
+      <p className="mt-4 font-mono text-white/30 text-xs">
         {step + 1} {t.of ?? 'de'} {total}
       </p>
     </div>
