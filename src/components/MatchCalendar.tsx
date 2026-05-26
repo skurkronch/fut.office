@@ -143,20 +143,20 @@ function MatchRow({
   const time = formatMatchTime(match.datetime, timezone, lang);
 
   return (
-    <div className="bg-chalk border-2 border-ink rounded-xl p-3.5 card-shadow flex items-center gap-3 group">
+    <div className="bg-chalk border-2 border-ink rounded-xl px-3 py-3 card-shadow flex items-center gap-2.5 group min-h-[60px]">
       {/* Time */}
-      <div className="font-mono text-whistle text-xs font-bold min-w-[52px] text-center">
+      <div className="font-mono text-whistle text-xs font-bold min-w-[46px] text-center shrink-0">
         {time}
       </div>
 
       {/* Teams */}
       <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2 text-sm font-semibold text-ink">
-          <span>{flagEmoji(match.homeTeam)}</span>
-          <span className="truncate">{match.homeTeam}</span>
-          <span className="text-ink/30 font-mono text-xs">vs</span>
-          <span>{flagEmoji(match.awayTeam)}</span>
-          <span className="truncate">{match.awayTeam}</span>
+        <div className="flex items-center gap-1.5 text-sm font-semibold text-ink flex-wrap">
+          <span className="shrink-0">{flagEmoji(match.homeTeam)}</span>
+          <span className="truncate max-w-[80px] sm:max-w-none">{match.homeTeam}</span>
+          <span className="text-ink/30 font-mono text-xs shrink-0">vs</span>
+          <span className="shrink-0">{flagEmoji(match.awayTeam)}</span>
+          <span className="truncate max-w-[80px] sm:max-w-none">{match.awayTeam}</span>
         </div>
         <div className="font-mono text-ink/40 text-xs mt-0.5 truncate">
           {match.group && (
@@ -164,14 +164,14 @@ function MatchRow({
               {lang === 'es' ? 'Grupo' : 'Group'} {match.group}
             </span>
           )}
-          {match.city}, {match.country}
+          {match.city}
         </div>
       </div>
 
       {/* CTA */}
       <button
         onClick={onSelect}
-        className="shrink-0 bg-pitch text-white font-mono text-xs px-3 py-2 rounded-lg hover:bg-pitch-line active:scale-95 transition-all"
+        className="shrink-0 bg-pitch text-white font-mono text-xs px-3 py-2.5 rounded-lg hover:bg-pitch-line active:scale-95 transition-all min-h-[40px]"
       >
         {t.organize ?? 'Organizar'}
       </button>

@@ -76,7 +76,7 @@ export default function NavBar({ lang, dict, timezone, onTimezoneClick }: Props)
           {/* Timezone button (mobile) */}
           <button
             onClick={onTimezoneClick}
-            className="flex sm:hidden items-center font-mono text-xs text-white/70 hover:text-white"
+            className="flex sm:hidden items-center justify-center w-9 h-9 font-mono text-base text-white/70 hover:text-white"
           >
             🌍
           </button>
@@ -92,7 +92,7 @@ export default function NavBar({ lang, dict, timezone, onTimezoneClick }: Props)
           {/* Split link (mobile) */}
           <Link
             href={`/${lang}/split/new`}
-            className="flex sm:hidden font-mono text-xs text-white/70 hover:text-white"
+            className="flex sm:hidden items-center justify-center w-9 h-9 font-mono text-base text-white/70 hover:text-white"
           >
             💸
           </Link>
@@ -101,7 +101,7 @@ export default function NavBar({ lang, dict, timezone, onTimezoneClick }: Props)
           <button
             onClick={toggleTheme}
             aria-label={isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
-            className="flex items-center justify-center w-8 h-8 rounded-full bg-pitch-dark/40 border border-white/15 text-sm hover:bg-pitch-dark/70 transition-colors"
+            className="flex items-center justify-center w-9 h-9 rounded-full bg-pitch-dark/40 border border-white/15 text-base hover:bg-pitch-dark/70 transition-colors"
           >
             {isDark ? '☀️' : '🌙'}
           </button>
@@ -109,7 +109,7 @@ export default function NavBar({ lang, dict, timezone, onTimezoneClick }: Props)
           {/* Language toggle */}
           <Link
             href={`/${otherLang}`}
-            className="font-mono text-xs uppercase tracking-widest bg-signal text-pitch-dark px-2.5 py-1 rounded-full font-bold hover:bg-signal/80 transition-colors"
+            className="font-mono text-xs uppercase tracking-widest bg-signal text-pitch-dark px-3 py-1.5 rounded-full font-bold hover:bg-signal/80 transition-colors min-h-[36px] flex items-center"
           >
             {otherLang}
           </Link>

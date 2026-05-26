@@ -106,3 +106,14 @@ body {
   border-radius: 8px;
   overflow: hidden;
 }
+
+/* Prevent iOS from zooming in on input focus (requires font-size >= 16px) */
+@media (max-width: 640px) {
+  input, textarea, select {
+    font-size: 16px !important;
+  }
+}
+
+/* Safe-area bottom padding for iOS home indicator */
+.pb-safe { padding-bottom: max(1rem, env(safe-area-inset-bottom)); }
+.pb-safe-sm { padding-bottom: env(safe-area-inset-bottom); }

@@ -42,8 +42,15 @@ export default function HomeClient({ lang, dict }: Props) {
       setDetectedTz(Intl.DateTimeFormat().resolvedOptions().timeZone);
     } catch { /* ignore */ }
 
-    if (!hasSeenIntro()) {
+    const params = new URLSearchParams(window.location.search);
+    const forceIntro = params.get('intro') === '1';
+
+    if (!hasSeenIntro() || forceIntro) {
       setShowIntro(true);
+      // Clean the param so a refresh doesn't re-trigger the intro
+      if (forceIntro) {
+        window.history.replaceState({}, '', window.location.pathname);
+      }
     } else if (!hasSeenTimezone()) {
       setShowTimezoneConfirm(true);
     }
@@ -116,7 +123,7 @@ export default function HomeClient({ lang, dict }: Props) {
         />
       )}
 
-      <main className="flex-1 max-w-2xl mx-auto w-full px-4 py-6">
+      <main className="flex-1 max-w-2xl mx-auto w-full px-4 pt-4 sm:pt-6 pb-safe">
         <AdSlot className="mb-6" label={t.ad?.label} />
 
         {upcoming.length === 0 ? (

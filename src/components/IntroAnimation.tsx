@@ -39,16 +39,16 @@ export default function IntroAnimation({ lang, dict, onClose }: Props) {
       <div className="absolute top-[-80px] right-[-60px] w-64 h-64 rounded-full border-2 border-white/20 pointer-events-none" />
 
       {/* Skip + lang */}
-      <div className="absolute top-5 right-5 flex items-center gap-3">
+      <div className="absolute top-4 right-4 flex items-center gap-1">
         <Link
-          href={`/${otherLang}`}
-          className="font-mono text-xs text-white/50 hover:text-white transition-colors uppercase tracking-widest"
+          href={`/${otherLang}?intro=1`}
+          className="font-mono text-xs text-white/50 hover:text-white transition-colors uppercase tracking-widest px-3 py-2 rounded-lg"
         >
           {lang === 'es' ? 'EN' : 'ES'}
         </Link>
         <button
           onClick={onClose}
-          className="font-mono text-xs text-white/50 hover:text-white transition-colors uppercase tracking-widest"
+          className="font-mono text-xs text-white/50 hover:text-white transition-colors uppercase tracking-widest px-3 py-2 rounded-lg"
         >
           {t.skip ?? 'Skip'}
         </button>
@@ -90,7 +90,7 @@ export default function IntroAnimation({ lang, dict, onClose }: Props) {
       {/* CTA */}
       <button
         onClick={advance}
-        className="mt-8 px-8 py-3 bg-signal text-pitch-dark font-display lowercase text-lg rounded-full hover:bg-signal/90 active:scale-95 transition-all"
+        className="mt-8 px-10 py-4 bg-signal text-pitch-dark font-display lowercase text-lg rounded-full hover:bg-signal/90 active:scale-95 transition-all min-w-[180px]"
       >
         {step < total - 1 ? (t.continue ?? 'Continuar') : (t.start ?? '¡A jugar!')}
       </button>

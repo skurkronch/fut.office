@@ -142,9 +142,9 @@ export default function MeetingModal({ target, timezone, lang, dict, onClose }: 
         if (e.target === backdropRef.current) onClose();
       }}
     >
-      <div className="w-full sm:max-w-md bg-chalk border-2 border-ink rounded-t-2xl sm:rounded-2xl max-h-[92dvh] flex flex-col card-shadow animate-slide-up overflow-hidden">
+      <div className="w-full sm:max-w-md bg-chalk border-2 border-ink rounded-t-2xl sm:rounded-2xl max-h-[94dvh] sm:max-h-[92dvh] flex flex-col card-shadow animate-slide-up overflow-hidden">
         {/* Header */}
-        <div className="pitch-bg border-b-4 border-signal px-5 pt-5 pb-4 shrink-0">
+        <div className="pitch-bg border-b-4 border-signal px-4 sm:px-5 pt-4 sm:pt-5 pb-3 sm:pb-4 shrink-0">
           <div className="flex items-start justify-between">
             <div className="flex-1 min-w-0 mr-3">
               <div className="font-mono text-signal text-xs tracking-widest uppercase mb-1">
@@ -192,7 +192,7 @@ export default function MeetingModal({ target, timezone, lang, dict, onClose }: 
         {/* Content */}
         <div className="overflow-y-auto flex-1">
           {step === 'form' ? (
-            <form onSubmit={handleSubmit} className="p-5 space-y-5">
+            <form onSubmit={handleSubmit} className="p-4 sm:p-5 space-y-4 sm:space-y-5">
               {/* Host name */}
               <div>
                 <label className="block font-mono text-xs text-ink/60 uppercase tracking-wider mb-1.5">
@@ -330,7 +330,7 @@ export default function MeetingModal({ target, timezone, lang, dict, onClose }: 
               </button>
             </form>
           ) : (
-            <div className="p-5 space-y-5">
+            <div className="p-4 sm:p-5 space-y-4 sm:space-y-5">
               <p className="font-mono text-pitch text-xs uppercase tracking-widest text-center">
                 {t.cardReady ?? '¡Tu tarjeta está lista!'}
               </p>
