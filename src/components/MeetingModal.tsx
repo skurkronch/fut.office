@@ -34,6 +34,15 @@ interface Props {
   onClose: () => void;
 }
 
+interface PlaceResult {
+  placeName: string;
+  displayName: string;
+  lat: number;
+  lng: number;
+  mapsUrl: string;
+  embedUrl: string;
+}
+
 export default function MeetingModal({ target, timezone, lang, dict, onClose }: Props) {
   const [step, setStep] = useState<ModalStep>('form');
   const [data, setData] = useState<MeetingData>({
@@ -46,66 +55,130 @@ export default function MeetingModal({ target, timezone, lang, dict, onClose }: 
     bringFood: '',
     note: '',
   });
+
+  // ── Place search state ────────────────────────────────────────────────────
+  const [locationInput, setLocationInput] = useState('');
+  const [searchResults, setSearchResults] = useState<PlaceResult[]>([]);
+  const [searching, setSearching] = useState(false);
+  const [showResults, setShowResults] = useState(false);
   const [resolvedEmbed, setResolvedEmbed] = useState<string | null>(null);
   const [resolvingMap, setResolvingMap] = useState(false);
+  const [showUrlFallback, setShowUrlFallback] = useState(false);
+
+  // ── Split state ───────────────────────────────────────────────────────────
   const [splitUrl, setSplitUrl] = useState<string | null>(null);
   const [splitCopied, setSplitCopied] = useState(false);
   const [creatingSplt, setCreatingSplit] = useState(false);
+
   const backdropRef = useRef<HTMLDivElement>(null);
+  const searchRef = useRef<HTMLDivElement>(null);
 
   const t = dict.meeting ?? {};
   const common = dict.common ?? {};
 
-  // ── Derived display info ───────────────────────────────────────────────
+  // ── Derived display info ──────────────────────────────────────────────────
   const isMatch = 'match' in target;
   const primaryMatch = isMatch ? target.match : target.matches[0];
   const time = primaryMatch ? formatMatchTime(primaryMatch.datetime, timezone, lang) : '';
   const date = primaryMatch ? formatMatchDate(primaryMatch.datetime, timezone, lang) : '';
 
-  // ── Google Maps URL resolution (debounced) ─────────────────────────────
+  // ── Close search results when clicking outside ────────────────────────────
   useEffect(() => {
-    const url = data.mapsUrl.trim();
-    if (!url) {
-      setResolvedEmbed(null);
+    const handler = (e: MouseEvent) => {
+      if (searchRef.current && !searchRef.current.contains(e.target as Node)) {
+        setShowResults(false);
+      }
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
+
+  // ── Smart location input: search or URL resolve ───────────────────────────
+  useEffect(() => {
+    const val = locationInput.trim();
+    if (!val) {
+      setSearchResults([]);
+      setShowResults(false);
       return;
     }
-    const isMapsUrl =
-      url.includes('google.com/maps') ||
-      url.includes('maps.app.goo.gl') ||
-      url.includes('goo.gl/maps');
-    if (!isMapsUrl) return;
 
+    const isUrl = val.startsWith('http://') || val.startsWith('https://');
+
+    if (isUrl) {
+      // URL mode — resolve via existing API
+      const isMapsUrl =
+        val.includes('google.com/maps') ||
+        val.includes('maps.app.goo.gl') ||
+        val.includes('goo.gl/maps');
+      if (!isMapsUrl) return;
+
+      const timer = setTimeout(async () => {
+        setResolvingMap(true);
+        try {
+          const res = await fetch(`/api/resolve-maps?url=${encodeURIComponent(val)}`);
+          const info = await res.json();
+          if (info.embedUrl) setResolvedEmbed(info.embedUrl);
+          setData((d) => ({
+            ...d,
+            mapsUrl: val,
+            placeName: info.placeName ?? d.placeName,
+            lat: info.lat,
+            lng: info.lng,
+          }));
+        } catch { /* silently ignore */ } finally {
+          setResolvingMap(false);
+        }
+      }, 600);
+      return () => clearTimeout(timer);
+    }
+
+    // Text search mode
+    if (val.length < 2) return;
     const timer = setTimeout(async () => {
-      setResolvingMap(true);
+      setSearching(true);
       try {
-        const res = await fetch(`/api/resolve-maps?url=${encodeURIComponent(url)}`);
-        const info = await res.json();
-        if (info.embedUrl) setResolvedEmbed(info.embedUrl);
-        // Store place name + coordinates (used by the shareable card)
-        setData((d) => ({
-          ...d,
-          placeName: info.placeName ?? d.placeName,
-          lat: info.lat,
-          lng: info.lng,
-        }));
-      } catch {
-        // silently ignore — embed stays null
-      } finally {
-        setResolvingMap(false);
+        const res = await fetch(`/api/search-places?q=${encodeURIComponent(val)}&lang=${lang}`);
+        const json = await res.json();
+        setSearchResults(json.results ?? []);
+        setShowResults(true);
+      } catch { /* silently ignore */ } finally {
+        setSearching(false);
       }
-    }, 600);
-
+    }, 400);
     return () => clearTimeout(timer);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data.mapsUrl]);
+  }, [locationInput]);
 
-  // ── Handlers ───────────────────────────────────────────────────────────
+  const selectPlace = (result: PlaceResult) => {
+    setData((d) => ({
+      ...d,
+      placeName: result.placeName,
+      mapsUrl: result.mapsUrl,
+      lat: result.lat,
+      lng: result.lng,
+    }));
+    setResolvedEmbed(result.embedUrl);
+    setLocationInput(result.placeName);
+    setShowResults(false);
+    setSearchResults([]);
+  };
+
+  const clearLocation = () => {
+    setLocationInput('');
+    setData((d) => ({ ...d, placeName: '', mapsUrl: '', lat: undefined, lng: undefined }));
+    setResolvedEmbed(null);
+    setSearchResults([]);
+    setShowResults(false);
+  };
+
+  // ── Form submit ───────────────────────────────────────────────────────────
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!data.mapsUrl.trim()) return;
+    if (!data.placeName.trim() && !data.mapsUrl.trim()) return;
     setStep('card');
   };
 
+  // ── Split ─────────────────────────────────────────────────────────────────
   const handleCreateSplit = useCallback(async () => {
     if (!data.hostName.trim()) return;
     setCreatingSplit(true);
@@ -133,6 +206,8 @@ export default function MeetingModal({ target, timezone, lang, dict, onClose }: 
       setTimeout(() => setSplitCopied(false), 2500);
     });
   };
+
+  const locationConfirmed = !!data.placeName || !!data.mapsUrl;
 
   return (
     <div
@@ -193,6 +268,7 @@ export default function MeetingModal({ target, timezone, lang, dict, onClose }: 
         <div className="overflow-y-auto flex-1">
           {step === 'form' ? (
             <form onSubmit={handleSubmit} className="p-4 sm:p-5 space-y-4 sm:space-y-5">
+
               {/* Host name */}
               <div>
                 <label className="block font-mono text-xs text-ink/60 uppercase tracking-wider mb-1.5">
@@ -208,44 +284,100 @@ export default function MeetingModal({ target, timezone, lang, dict, onClose }: 
                 />
               </div>
 
-              {/* Google Maps URL */}
+              {/* Location */}
               <div>
                 <div className="font-mono text-xs text-ink/60 uppercase tracking-wider mb-1.5">
                   {t.section1 ?? '¿Dónde?'}
                 </div>
 
-                <div className="relative">
-                  <input
-                    type="url"
-                    required
-                    placeholder={t.mapsUrlPlaceholder ?? 'Pega el link de Google Maps aquí'}
-                    value={data.mapsUrl}
-                    onChange={(e) => {
-                      setData((d) => ({ ...d, mapsUrl: e.target.value, placeName: '' }));
-                      setResolvedEmbed(null);
-                    }}
-                    className="w-full border-2 border-ink rounded-lg px-3 py-2 font-sans text-sm bg-turf text-ink placeholder-ink/30 outline-none focus:border-pitch pr-8"
-                  />
-                  {resolvingMap && (
-                    <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs animate-pulse">
-                      🔍
-                    </span>
+                {/* Smart search input */}
+                <div ref={searchRef} className="relative">
+                  <div className="relative">
+                    <input
+                      type="text"
+                      placeholder={t.searchPlaceholder ?? 'Buscar restaurante, bar, dirección...'}
+                      value={locationInput}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        setLocationInput(val);
+                        // If user clears it, reset location data
+                        if (!val) clearLocation();
+                        else if (!val.startsWith('http')) {
+                          // Reset place selection when user starts typing again
+                          setData((d) => ({ ...d, placeName: '', mapsUrl: '', lat: undefined, lng: undefined }));
+                          setResolvedEmbed(null);
+                        }
+                      }}
+                      onFocus={() => {
+                        if (searchResults.length > 0) setShowResults(true);
+                      }}
+                      className="w-full border-2 border-ink rounded-lg px-3 py-2 pr-16 font-sans text-sm bg-turf text-ink placeholder-ink/30 outline-none focus:border-pitch"
+                    />
+                    {/* Status icons */}
+                    <div className="absolute right-2.5 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
+                      {(searching || resolvingMap) && (
+                        <span className="text-xs animate-pulse">🔍</span>
+                      )}
+                      {locationConfirmed && !searching && !resolvingMap && (
+                        <span className="text-pitch text-sm">✓</span>
+                      )}
+                      {locationInput && (
+                        <button
+                          type="button"
+                          onClick={clearLocation}
+                          className="text-ink/40 hover:text-ink text-lg leading-none w-5 h-5 flex items-center justify-center"
+                        >
+                          ×
+                        </button>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Autocomplete dropdown */}
+                  {showResults && searchResults.length > 0 && (
+                    <div className="absolute z-20 left-0 right-0 top-full mt-1 bg-chalk border-2 border-ink rounded-xl overflow-hidden shadow-lg animate-fade-in">
+                      {searchResults.map((result, i) => (
+                        <button
+                          key={i}
+                          type="button"
+                          onClick={() => selectPlace(result)}
+                          className="w-full text-left px-3 py-2.5 hover:bg-turf transition-colors border-b border-ink/10 last:border-0"
+                        >
+                          <div className="text-sm font-semibold text-ink truncate">
+                            📍 {result.placeName}
+                          </div>
+                          <div className="text-xs text-ink/40 font-mono truncate mt-0.5">
+                            {result.displayName}
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+
+                  {showResults && !searching && searchResults.length === 0 && locationInput.length >= 2 && !locationInput.startsWith('http') && (
+                    <div className="absolute z-20 left-0 right-0 top-full mt-1 bg-chalk border-2 border-ink rounded-xl px-3 py-3 shadow-lg">
+                      <p className="text-sm text-ink/50 font-mono text-center">
+                        {t.noPlacesFound ?? 'Sin resultados'}
+                      </p>
+                    </div>
                   )}
                 </div>
 
-                {/* Resolved place name chip */}
-                {data.placeName && !resolvingMap && (
+                {/* Confirmed place chip */}
+                {locationConfirmed && !searching && !resolvingMap && (
                   <div className="mt-1.5 flex items-center gap-1.5">
                     <span className="text-pitch text-xs">✓</span>
                     <span className="font-mono text-pitch text-xs">
                       {t.placeFound ?? 'Lugar encontrado'}:{' '}
-                      <span className="font-semibold">{data.placeName}</span>
+                      <span className="font-semibold">{data.placeName || data.mapsUrl}</span>
                     </span>
                   </div>
                 )}
-                {resolvingMap && (
+
+                {/* Resolving / searching status */}
+                {(resolvingMap || searching) && (
                   <p className="font-mono text-ink/40 text-xs mt-1 animate-pulse">
-                    {t.resolving ?? 'Buscando ubicación...'}
+                    {searching ? (t.searching ?? 'Buscando...') : (t.resolving ?? 'Buscando ubicación...')}
                   </p>
                 )}
 
@@ -261,6 +393,29 @@ export default function MeetingModal({ target, timezone, lang, dict, onClose }: 
                       title="map preview"
                     />
                   </div>
+                )}
+
+                {/* Fallback: paste Google Maps URL */}
+                <button
+                  type="button"
+                  onClick={() => setShowUrlFallback((v) => !v)}
+                  className="mt-2 text-xs font-mono text-ink/40 hover:text-ink/70 transition-colors"
+                >
+                  {showUrlFallback ? '▴' : '▾'} {t.orPasteUrl ?? 'O pega el link de Google Maps'}
+                </button>
+
+                {showUrlFallback && (
+                  <input
+                    type="url"
+                    placeholder={t.mapsUrlPlaceholder ?? 'https://maps.google.com/...'}
+                    value={locationInput.startsWith('http') ? locationInput : ''}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setLocationInput(val);
+                      if (!val) clearLocation();
+                    }}
+                    className="mt-1.5 w-full border-2 border-ink/40 rounded-lg px-3 py-2 font-sans text-sm bg-turf text-ink placeholder-ink/30 outline-none focus:border-pitch"
+                  />
                 )}
 
                 {/* Interior number */}

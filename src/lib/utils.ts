@@ -111,10 +111,21 @@ export function getAllTimezones(): TimezoneOption[] {
   return _allTzCache;
 }
 
+// ─── Locale → BCP-47 tag mapping ────────────────────────────────────────────
+function getBCP47(locale: Locale): string {
+  const map: Record<Locale, string> = {
+    es: 'es-MX',
+    en: 'en-US',
+    pt: 'pt-BR',
+    fr: 'fr-FR',
+  };
+  return map[locale] ?? 'en-US';
+}
+
 // ─── Date/time formatting ────────────────────────────────────────────────────
 export function formatMatchTime(utcDatetime: string, timezone: string, locale: Locale): string {
   const date = new Date(utcDatetime);
-  return date.toLocaleTimeString(locale === 'es' ? 'es-MX' : 'en-US', {
+  return date.toLocaleTimeString(getBCP47(locale), {
     timeZone: timezone,
     hour: '2-digit',
     minute: '2-digit',
@@ -124,7 +135,7 @@ export function formatMatchTime(utcDatetime: string, timezone: string, locale: L
 
 export function formatMatchDate(utcDatetime: string, timezone: string, locale: Locale): string {
   const date = new Date(utcDatetime);
-  return date.toLocaleDateString(locale === 'es' ? 'es-MX' : 'en-US', {
+  return date.toLocaleDateString(getBCP47(locale), {
     timeZone: timezone,
     weekday: 'long',
     month: 'long',
@@ -162,7 +173,7 @@ export function formatDayHeader(
   if (localDate === todayKey) return t.today ?? 'Today';
   if (localDate === tomorrowKey) return t.tomorrow ?? 'Tomorrow';
 
-  return date.toLocaleDateString(locale === 'es' ? 'es-MX' : 'en-US', {
+  return date.toLocaleDateString(getBCP47(locale), {
     timeZone: timezone,
     weekday: 'long',
     month: 'long',

@@ -24,7 +24,7 @@
     "step1Title": "Elige un partido",
     "step1Desc": "Mira los 104 partidos del Mundial 2026 en tu zona horaria.",
     "step2Title": "Organiza la quedada",
-    "step2Desc": "Comparte el link de Google Maps y define qué llevar.",
+    "step2Desc": "Busca el lugar en el mapa y define qué llevar.",
     "step3Title": "Comparte la tarjeta",
     "step3Desc": "Descarga la tarjeta y mándala por WhatsApp.",
     "step4Title": "Divide los gastos",
@@ -46,7 +46,10 @@
     "organize": "Organizar",
     "organizeDay": "Organizar todos los partidos del día",
     "today": "Hoy",
-    "tomorrow": "Mañana"
+    "tomorrow": "Mañana",
+    "group": "Grupo",
+    "match_singular": "partido",
+    "match_plural": "partidos"
   },
   "stage": {
     "group": "Fase de Grupos",
@@ -77,6 +80,10 @@
     "matches": "partidos",
     "match": "Partido",
     "section1": "¿Dónde?",
+    "searchPlaceholder": "Buscar restaurante, bar, dirección...",
+    "searching": "Buscando...",
+    "noPlacesFound": "Sin resultados",
+    "orPasteUrl": "O pega el link de Google Maps",
     "mapsUrl": "URL de Google Maps",
     "mapsUrlPlaceholder": "Pega el link de Google Maps aquí",
     "resolving": "Buscando ubicación...",
@@ -99,7 +106,12 @@
     "splitCreated": "¡Link del divisor listo!",
     "copySplitLink": "Copiar link",
     "yourName": "Tu nombre (anfitrión)",
-    "yourNamePlaceholder": "Ej. Carlos"
+    "yourNamePlaceholder": "Ej. Carlos",
+    "cardHost": "Anfitrión",
+    "cardWhere": "Dónde",
+    "cardUnit": "No. Interior",
+    "cardBring": "Lleva",
+    "cardNote": "Nota"
   },
   "split": {
     "title": "Divisor de gastos",

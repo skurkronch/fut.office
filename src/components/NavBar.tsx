@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import type { Locale } from '@/lib/i18n';
+import LanguageSwitcher from './LanguageSwitcher';
 
 interface Props {
   lang: Locale;
@@ -22,16 +23,12 @@ function getIsDark(): boolean {
 export default function NavBar({ lang, dict, timezone, onTimezoneClick }: Props) {
   const t = dict.home ?? {};
   const nav = dict.nav ?? {};
-  const otherLang = lang === 'es' ? 'en' : 'es';
   const shortTz = timezone.split('/').pop()?.replace(/_/g, ' ') ?? timezone;
 
   const [isDark, setIsDark] = useState(false);
 
-  // Sync with stored/system preference after mount
   useEffect(() => {
     setIsDark(getIsDark());
-
-    // Also listen for system preference changes (when no manual override)
     const mq = window.matchMedia('(prefers-color-scheme: dark)');
     const handler = () => {
       if (!localStorage.getItem('fut-theme')) setIsDark(mq.matches);
@@ -65,7 +62,7 @@ export default function NavBar({ lang, dict, timezone, onTimezoneClick }: Props)
 
         {/* Right controls */}
         <div className="flex items-center gap-2 z-10">
-          {/* Timezone button (desktop) */}
+          {/* Timezone (desktop) */}
           <button
             onClick={onTimezoneClick}
             className="hidden sm:flex items-center gap-2 font-mono text-xs text-white/70 hover:text-white bg-pitch-dark/40 border border-white/15 rounded-full px-3 py-1.5 transition-colors"
@@ -73,10 +70,10 @@ export default function NavBar({ lang, dict, timezone, onTimezoneClick }: Props)
             <span>🌍</span>
             <span className="max-w-[100px] truncate">{shortTz}</span>
           </button>
-          {/* Timezone button (mobile) */}
+          {/* Timezone (mobile) */}
           <button
             onClick={onTimezoneClick}
-            className="flex sm:hidden items-center justify-center w-9 h-9 font-mono text-base text-white/70 hover:text-white"
+            className="flex sm:hidden items-center justify-center w-9 h-9 text-base text-white/70 hover:text-white"
           >
             🌍
           </button>
@@ -92,7 +89,7 @@ export default function NavBar({ lang, dict, timezone, onTimezoneClick }: Props)
           {/* Split link (mobile) */}
           <Link
             href={`/${lang}/split/new`}
-            className="flex sm:hidden items-center justify-center w-9 h-9 font-mono text-base text-white/70 hover:text-white"
+            className="flex sm:hidden items-center justify-center w-9 h-9 text-base text-white/70 hover:text-white"
           >
             💸
           </Link>
@@ -106,13 +103,8 @@ export default function NavBar({ lang, dict, timezone, onTimezoneClick }: Props)
             {isDark ? '☀️' : '🌙'}
           </button>
 
-          {/* Language toggle */}
-          <Link
-            href={`/${otherLang}`}
-            className="font-mono text-xs uppercase tracking-widest bg-signal text-pitch-dark px-3 py-1.5 rounded-full font-bold hover:bg-signal/80 transition-colors min-h-[36px] flex items-center"
-          >
-            {otherLang}
-          </Link>
+          {/* Language switcher (4 langs) */}
+          <LanguageSwitcher lang={lang} />
         </div>
       </div>
 

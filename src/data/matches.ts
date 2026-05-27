@@ -188,12 +188,12 @@ export function groupMatchesByDay(matchList: Match[]): Map<string, Match[]> {
   return map;
 }
 
-export const STAGE_LABELS: Record<Stage, { es: string; en: string }> = {
-  group:  { es: 'Fase de Grupos', en: 'Group Stage' },
-  r32:    { es: 'Ronda de 32',    en: 'Round of 32' },
-  r16:    { es: 'Octavos de Final', en: 'Round of 16' },
-  qf:     { es: 'Cuartos de Final', en: 'Quarterfinals' },
-  sf:     { es: 'Semifinales',    en: 'Semifinals' },
-  bronze: { es: 'Tercer Lugar',   en: 'Third Place' },
-  final:  { es: 'Final',          en: 'Final' },
+export const STAGE_LABELS: Record<Stage, Record<string, string>> = {
+  group:  { es: 'Fase de Grupos',    en: 'Group Stage',    pt: 'Fase de Grupos',    fr: 'Phase de Groupes' },
+  r32:    { es: 'Ronda de 32',       en: 'Round of 32',    pt: 'Rodada de 32',      fr: 'Tour de 32' },
+  r16:    { es: 'Octavos de Final',  en: 'Round of 16',    pt: 'Oitavas de Final',  fr: 'Huitièmes de finale' },
+  qf:     { es: 'Cuartos de Final',  en: 'Quarterfinals',  pt: 'Quartas de Final',  fr: 'Quarts de finale' },
+  sf:     { es: 'Semifinales',       en: 'Semifinals',     pt: 'Semifinais',        fr: 'Demi-finales' },
+  bronze: { es: 'Tercer Lugar',      en: 'Third Place',    pt: 'Terceiro Lugar',    fr: 'Troisième place' },
+  final:  { es: 'Final',             en: 'Final',          pt: 'Final',             fr: 'Finale' },
 };

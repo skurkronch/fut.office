@@ -114,9 +114,10 @@ function DayBlock({
               {t.organizeDay ?? 'Organizar todos los partidos del día'}
             </div>
             <div className="font-mono text-xs text-pitch/60 mt-0.5">
-              {matches.length} {matches.length === 1
-                ? (lang === 'es' ? 'partido' : 'match')
-                : (lang === 'es' ? 'partidos' : 'matches')}
+              {matches.length}{' '}
+            {matches.length === 1
+              ? (dict.home?.match_singular ?? (lang === 'es' ? 'partido' : 'match'))
+              : (dict.home?.match_plural   ?? (lang === 'es' ? 'partidos' : 'matches'))}
             </div>
           </div>
         </div>
@@ -151,17 +152,21 @@ function MatchRow({
 
       {/* Teams */}
       <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-1.5 text-sm font-semibold text-ink flex-wrap">
-          <span className="shrink-0">{flagEmoji(match.homeTeam)}</span>
-          <span className="truncate max-w-[80px] sm:max-w-none">{match.homeTeam}</span>
-          <span className="text-ink/30 font-mono text-xs shrink-0">vs</span>
-          <span className="shrink-0">{flagEmoji(match.awayTeam)}</span>
-          <span className="truncate max-w-[80px] sm:max-w-none">{match.awayTeam}</span>
+        <div className="space-y-0.5">
+          <div className="flex items-center gap-1.5 text-sm font-semibold text-ink min-w-0">
+            <span className="shrink-0">{flagEmoji(match.homeTeam)}</span>
+            <span className="truncate">{match.homeTeam}</span>
+          </div>
+          <div className="flex items-center gap-1.5 text-sm font-semibold text-ink min-w-0">
+            <span className="font-mono text-[10px] text-ink/30 w-4 text-center shrink-0">vs</span>
+            <span className="shrink-0">{flagEmoji(match.awayTeam)}</span>
+            <span className="truncate">{match.awayTeam}</span>
+          </div>
         </div>
         <div className="font-mono text-ink/40 text-xs mt-0.5 truncate">
           {match.group && (
             <span className="text-pitch font-bold mr-1.5">
-              {lang === 'es' ? 'Grupo' : 'Group'} {match.group}
+              {dict.home?.group ?? (lang === 'es' ? 'Grupo' : 'Group')} {match.group}
             </span>
           )}
           {match.city}

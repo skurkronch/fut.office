@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import type { Locale } from '@/lib/i18n';
-import Link from 'next/link';
+import LanguageSwitcher from './LanguageSwitcher';
 
 interface Props {
   lang: Locale;
@@ -20,7 +20,6 @@ const STEPS = [
 export default function IntroAnimation({ lang, dict, onClose }: Props) {
   const [step, setStep] = useState(0);
   const t = dict.intro ?? {};
-  const otherLang = lang === 'es' ? 'en' : 'es';
   const total = STEPS.length;
 
   const advance = () => {
@@ -38,14 +37,14 @@ export default function IntroAnimation({ lang, dict, onClose }: Props) {
       {/* Decorative circle */}
       <div className="absolute top-[-80px] right-[-60px] w-64 h-64 rounded-full border-2 border-white/20 pointer-events-none" />
 
-      {/* Skip + lang */}
-      <div className="absolute top-4 right-4 flex items-center gap-1">
-        <Link
-          href={`/${otherLang}?intro=1`}
-          className="font-mono text-xs text-white/50 hover:text-white transition-colors uppercase tracking-widest px-3 py-2 rounded-lg"
-        >
-          {lang === 'es' ? 'EN' : 'ES'}
-        </Link>
+      {/* Skip + lang switcher */}
+      <div className="absolute top-4 right-4 flex items-center gap-1 z-10">
+        {/* Language switcher — passes ?intro=1 so the new lang page shows the intro */}
+        <LanguageSwitcher
+          lang={lang}
+          extraParam="?intro=1"
+          triggerClass="font-mono text-xs text-white/50 hover:text-white transition-colors uppercase tracking-widest px-3 py-2 rounded-lg flex items-center gap-1"
+        />
         <button
           onClick={onClose}
           className="font-mono text-xs text-white/50 hover:text-white transition-colors uppercase tracking-widest px-3 py-2 rounded-lg"

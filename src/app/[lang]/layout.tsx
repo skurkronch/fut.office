@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation';
 import { isValidLocale, getDictionary } from '@/lib/i18n';
 
 export async function generateStaticParams() {
-  return [{ lang: 'es' }, { lang: 'en' }];
+  return [{ lang: 'es' }, { lang: 'en' }, { lang: 'pt' }, { lang: 'fr' }];
 }
 
 export default async function LangLayout({

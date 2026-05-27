@@ -118,7 +118,7 @@ export default function ShareableCard({ target, data, timezone, lang, dict }: Pr
           {/* Host */}
           <div>
             <div className="text-ink/50 text-xs font-mono uppercase tracking-wider mb-0.5">
-              {lang === 'es' ? 'Anfitrión' : 'Host'}
+              {t.cardHost ?? 'Host'}
             </div>
             <div className="text-ink font-semibold text-sm">{data.hostName || '—'}</div>
           </div>
@@ -126,7 +126,7 @@ export default function ShareableCard({ target, data, timezone, lang, dict }: Pr
           {/* Location */}
           <div>
             <div className="text-ink/50 text-xs font-mono uppercase tracking-wider mb-0.5">
-              📍 {lang === 'es' ? 'Dónde' : 'Where'}
+              📍 {t.cardWhere ?? 'Where'}
             </div>
             <div className="text-ink font-semibold text-sm">
               {data.placeName || data.mapsUrl || '—'}
@@ -134,7 +134,7 @@ export default function ShareableCard({ target, data, timezone, lang, dict }: Pr
             {data.interiorNumber && (
               <div className="text-ink/70 text-xs mt-0.5">
                 <span className="font-mono uppercase tracking-wide text-ink/40">
-                  {lang === 'es' ? 'No. Interior' : 'Unit'}:
+                  {t.cardUnit ?? 'Unit'}:
                 </span>{' '}
                 <span className="font-semibold">{data.interiorNumber}</span>
               </div>
@@ -145,18 +145,18 @@ export default function ShareableCard({ target, data, timezone, lang, dict }: Pr
           <div className="flex gap-3">
             <div className="flex-1 bg-turf rounded-lg px-3 py-2 text-center">
               <div className="text-xs font-mono text-ink/50 mb-0.5">
-                {lang === 'es' ? 'Estacionamiento' : 'Parking'}
+                {t.parking ?? 'Parking'}
               </div>
               <div className={`text-sm font-bold ${data.parking ? 'text-pitch' : 'text-whistle'}`}>
-                {data.parking ? '✅ Sí' : '❌ No'}
+                {data.parking ? '✅' : '❌'} {data.parking ? (common.yes ?? 'Sí') : (common.no ?? 'No')}
               </div>
             </div>
             <div className="flex-1 bg-turf rounded-lg px-3 py-2 text-center">
               <div className="text-xs font-mono text-ink/50 mb-0.5">
-                {lang === 'es' ? 'Espacio privado para juntas' : 'Private space for calls'}
+                {t.meetingRoom ?? 'Private space'}
               </div>
               <div className={`text-sm font-bold ${data.meetingRoom ? 'text-pitch' : 'text-whistle'}`}>
-                {data.meetingRoom ? '✅ Sí' : '❌ No'}
+                {data.meetingRoom ? '✅' : '❌'} {data.meetingRoom ? (common.yes ?? 'Sí') : (common.no ?? 'No')}
               </div>
             </div>
           </div>
@@ -165,7 +165,7 @@ export default function ShareableCard({ target, data, timezone, lang, dict }: Pr
           {data.bringFood && (
             <div>
               <div className="text-ink/50 text-xs font-mono uppercase tracking-wider mb-0.5">
-                🧃 {lang === 'es' ? 'Lleva' : 'Bring'}
+                🧃 {t.cardBring ?? 'Bring'}
               </div>
               <div className="text-ink text-sm">{data.bringFood}</div>
             </div>
@@ -175,7 +175,7 @@ export default function ShareableCard({ target, data, timezone, lang, dict }: Pr
           {data.note && (
             <div className="bg-card-yellow/20 border border-card-yellow rounded-lg px-3 py-2">
               <div className="text-ink/60 text-xs font-mono uppercase tracking-wider mb-0.5">
-                💬 {lang === 'es' ? 'Nota' : 'Note'}
+                💬 {t.cardNote ?? 'Note'}
               </div>
               <div className="text-ink text-sm">{data.note}</div>
             </div>

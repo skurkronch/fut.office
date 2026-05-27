@@ -24,7 +24,7 @@
     "step1Title": "Pick a match",
     "step1Desc": "See all 104 World Cup 2026 matches in your local time.",
     "step2Title": "Organize the meetup",
-    "step2Desc": "Share a Google Maps link and decide what to bring.",
+    "step2Desc": "Search for the venue directly in the app and decide what to bring.",
     "step3Title": "Share the card",
     "step3Desc": "Download the card and send it on WhatsApp.",
     "step4Title": "Split the expenses",
@@ -46,7 +46,10 @@
     "organize": "Organize",
     "organizeDay": "Organize all matches of the day",
     "today": "Today",
-    "tomorrow": "Tomorrow"
+    "tomorrow": "Tomorrow",
+    "group": "Group",
+    "match_singular": "match",
+    "match_plural": "matches"
   },
   "stage": {
     "group": "Group Stage",
@@ -77,6 +80,10 @@
     "matches": "matches",
     "match": "Match",
     "section1": "Where?",
+    "searchPlaceholder": "Search restaurant, bar, address...",
+    "searching": "Searching...",
+    "noPlacesFound": "No places found",
+    "orPasteUrl": "Or paste a Google Maps link",
     "mapsUrl": "Google Maps URL",
     "mapsUrlPlaceholder": "Paste the Google Maps link here",
     "resolving": "Finding location...",
@@ -99,7 +106,12 @@
     "splitCreated": "Split link ready!",
     "copySplitLink": "Copy link",
     "yourName": "Your name (host)",
-    "yourNamePlaceholder": "e.g. Carlos"
+    "yourNamePlaceholder": "e.g. Carlos",
+    "cardHost": "Host",
+    "cardWhere": "Where",
+    "cardUnit": "Unit",
+    "cardBring": "Bring",
+    "cardNote": "Note"
   },
   "split": {
     "title": "Expense split",
