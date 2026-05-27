@@ -32,7 +32,14 @@ export default function MatchCalendar({
       if (!map.has(key)) map.set(key, []);
       map.get(key)!.push(m);
     }
-    return [...map.entries()].sort(([a], [b]) => a.localeCompare(b));
+    return [...map.entries()]
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([key, dayMatches]) => [
+        key,
+        [...dayMatches].sort(
+          (a, b) => new Date(a.datetime).getTime() - new Date(b.datetime).getTime()
+        ),
+      ] as [string, Match[]]);
   }, [matches, timezone]);
 
   return (
